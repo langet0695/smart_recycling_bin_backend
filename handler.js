@@ -108,8 +108,14 @@ module.exports.detectFace = async (event, context) => {
 module.exports.detectLabel = async (event, context) => {
 
   let request = event.body;
+  console.log(event);
+  // Create a buffer from the string
+  let bufferObj = Buffer.from(request, "base64");
 
-  let jsonData = JSON.parse(request);
+    // Encode the Buffer as a utf8 string
+  let decodedRequest = bufferObj.toString("utf8");
+  let jsonData = JSON.parse(decodedRequest);
+//  let jsonData = JSON.parse(request);
 
   let imageToDetect = jsonData.fileName;
 
