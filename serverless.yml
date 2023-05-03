@@ -2,11 +2,15 @@
 # https://serverless.com/framework/docs/
 # Serverless.yml is the configuration the CLI
 # uses to deploy your code to your provider of choice
+
 # The `service` block is the name of the service
-service: smart-recycling-backend
+#service: smart-recycling-backend
+service: test-file-import
+
 # The `provider` block defines where your service will be deployed
 custom:
-  projectBucket: smart-recycling-backend
+#  projectBucket: smart-recycling-backend
+  projectBucket: test-file-import
   dataBucket: smart-recycling-bin-images
 
 # The `provider` block defines where your service will be deployed
@@ -14,7 +18,8 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-2
-  stackName: smart-recycling-backend
+#  stackName: smart-recycling-backend
+  stackName: test-file-import
   apiGateway:
     binaryMediaTypes:
       - '*/*'
@@ -25,8 +30,7 @@ provider:
         - "s3:GetObject"
         - "rekognition:*"
       Resource: "*"
-#      Resource:
-#        - "arn:aws:s3:::${self:custom.bucket}/*"
+
 # The `functions` block defines what code to deploy
 functions:
 
@@ -41,14 +45,14 @@ functions:
           cors: true
 
   healthCheck:
-    handler: handler.healthCheck
+    handler: healthCheckHome.handler
     events:
       - http:
           path: /healthCheck
           method: get
 
   getAllFiles:
-    handler: handler.getAllFiles
+    handler: getAllFilesHome.handler
     environment:
       BUCKET: ${self:custom.dataBucket}
     events:
@@ -57,17 +61,10 @@ functions:
           method: get
 
   detectLabel:
-    handler: handler.detectLabel
+    handler: detectLabelHome.handler
     environment:
       BUCKET: ${self:custom.dataBucket}
     events:
       - http:
           path: /detectLabel
           method: post
-
-#resources:
-#  Resources:
-#    StorageBucket:
-#      Type: "AWS::S3::Bucket"
-#      Properties:
-#        BucketName: ${self:custom.projectBucket}

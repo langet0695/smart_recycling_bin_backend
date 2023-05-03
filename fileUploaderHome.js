@@ -1,15 +1,16 @@
+// Upload code adapted from https://dev.to/foqc/uploading-images-to-aws-s3-with-serverless-1ae0
+// Change a couple functions and fixed a few bugs that existed in the base code
+
 "use strict";
+
 const AWS = require("aws-sdk");
-//const uuid = require("uuid");
 const { v4: uuidv4 } = require('uuid');
-//const { v4: uuid_v4 } = require('uuid');
-//uuid_v4();
 const Jimp = require("jimp");
 const s3 = new AWS.S3();
 const formParser = require("./formParser");
 
 const bucket = process.env.Bucket;
-const MAX_SIZE = 4500000; // 4MB
+const MAX_SIZE = 2500000; //2.5MB
 
 const PNG_MIME_TYPE = "image/png";
 const JPEG_MIME_TYPE = "image/jpeg";
@@ -25,7 +26,6 @@ module.exports.handler = async event => {
     if (!isAllowedFile(file.content.byteLength, file.contentType))
       getErrorMessage("File size or type not allowed");
 
-//    const uid = uuid();
     const uid = uuidv4();
 
     const originalKey = `${uid}_original_${file.filename}`;
