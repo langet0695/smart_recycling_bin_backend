@@ -4,13 +4,13 @@
 # uses to deploy your code to your provider of choice
 
 # The `service` block is the name of the service
-#service: smart-recycling-backend
-service: test-file-import
+service: smart-recycling-backend
+#service: test-file-import
 
 # The `provider` block defines where your service will be deployed
 custom:
-#  projectBucket: smart-recycling-backend
-  projectBucket: test-file-import
+  projectBucket: smart-recycling-backend
+#  projectBucket: test-file-import
   dataBucket: smart-recycling-bin-images
 
 # The `provider` block defines where your service will be deployed
@@ -18,8 +18,8 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: us-east-2
-#  stackName: smart-recycling-backend
-  stackName: test-file-import
+  stackName: smart-recycling-backend
+#  stackName: test-file-import
   apiGateway:
     binaryMediaTypes:
       - '*/*'
@@ -35,7 +35,7 @@ provider:
 functions:
 
   uploadFile:
-    handler: fileUploaderHome.handler
+    handler: src/fileUploaderHome.handler
     environment:
       Bucket: ${self:custom.dataBucket}/upload
     events:
@@ -45,14 +45,14 @@ functions:
           cors: true
 
   healthCheck:
-    handler: healthCheckHome.handler
+    handler: src/healthCheckHome.handler
     events:
       - http:
           path: /healthCheck
           method: get
 
   getAllFiles:
-    handler: getAllFilesHome.handler
+    handler: src/getAllFilesHome.handler
     environment:
       BUCKET: ${self:custom.dataBucket}
     events:
@@ -61,7 +61,7 @@ functions:
           method: get
 
   detectLabel:
-    handler: detectLabelHome.handler
+    handler: src/detectLabelHome.handler
     environment:
       BUCKET: ${self:custom.dataBucket}
     events:

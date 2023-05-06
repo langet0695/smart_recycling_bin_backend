@@ -29,7 +29,6 @@ module.exports.handler = async event => {
     const uid = uuidv4();
 
     const originalKey = `${uid}_original_${file.filename}`;
-    const thumbnailKey = `${uid}_thumbnail_${file.filename}`;
 
     const fileResizedBuffer = await resize(
       file.content,
@@ -37,20 +36,11 @@ module.exports.handler = async event => {
       460
     );
 
-    const [originalFile, thumbnailFile] = await Promise.all([
-      uploadToS3(bucket, originalKey, file.content, file.contentType),
-      uploadToS3(bucket, thumbnailKey, fileResizedBuffer, file.contentType)
-    ]);
+    const originalFile = await uploadToS3(bucket, originalKey, file.content, file.contentType);
 
     const signedOriginalUrl = s3.getSignedUrl("getObject", {
       Bucket: originalFile.Bucket,
       Key: originalKey,
-      Expires: 60000
-    });
-
-    const signedThumbnailUrl = s3.getSignedUrl("getObject", {
-      Bucket: thumbnailFile.Bucket,
-      Key: thumbnailKey,
       Expires: 60000
     });
 
@@ -60,11 +50,9 @@ module.exports.handler = async event => {
         id: uid,
         mimeType: file.contentType,
         originalKey: originalFile.key,
-        thumbnailKey: thumbnailFile.key,
         bucket: originalFile.Bucket,
         fileName: file.filename,
         originalUrl: signedOriginalUrl,
-        thumbnailUrl: signedThumbnailUrl,
         originalSize: file.content.byteLength
       })
     };
