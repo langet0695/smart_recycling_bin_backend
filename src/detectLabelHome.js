@@ -30,6 +30,8 @@ module.exports.handler = async (event, context) => {
 
   let labelResult = await rekognition.detectLabels(labelDetectionParams).promise();
 
+  //TODO: Write and insert method to interpret an analyze label result to assess recyclability
+
   let labels = labelResult.Labels;
 
 
