@@ -4,6 +4,7 @@ const AWS = require("aws-sdk");
 const rekognition = new AWS.Rekognition(
 { apiVersion: "2016-06-27" }
 );
+const labelAnalyzer = require("./labelAnalyzer");
 
 module.exports.handler = async (event, context) => {
 
@@ -30,25 +31,13 @@ module.exports.handler = async (event, context) => {
 
   let labelResult = await rekognition.detectLabels(labelDetectionParams).promise();
 
-  //TODO: Write and insert method to interpret an analyze label result to assess recyclability
-
   let labels = labelResult.Labels;
 
-  let tmp_response = {
-               "is_recyclable":true,
-               "item_type":"plastic_bottle",
-               "confidence_score":0.8,
-               "bounding_box":{
-                  "Height":0.1,
-                  "Left":0.3,
-                  "Top":0.1,
-                  "Width":0.2
-               }
-            };
+  const output = await labelAnalyzer.analyzer(labels);
 
   return {
     statusCode: 200,
-    body: JSON.stringify(tmp_response, null, 2),
+    body: JSON.stringify(output, null, 2),
   };
 
 };
