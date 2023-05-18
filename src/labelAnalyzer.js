@@ -48,6 +48,18 @@ module.exports.analyzer = (labels) => {
                "instances": instances
             };
     }
+    else if (valid_item) {
+        let item_type = valid_item["Name"];
+        let confidence_score = valid_item["Confidence"]
+        let instances = valid_item["Instances"]
+
+        response = {
+               "is_recyclable": true,
+               "item_type": item_type,
+               "confidence_score": confidence_score,
+               "instances": instances
+            };
+    }
     else {
         response = {
                "is_recyclable": false,
