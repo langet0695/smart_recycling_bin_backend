@@ -36,7 +36,7 @@ module.exports.analyzer = (labels) => {
 // Construct a response for the api
     let response = {}
 
-    if (valid_item && valid_item) {
+    if (valid_item && valid_material) {
         let item_type = ''.concat(valid_material["Name"], "_", valid_item["Name"]);
         let confidence_score = valid_material["Confidence"] < valid_item["Confidence"] ? valid_material["Confidence"] : valid_item["Confidence"]
         let instances = valid_item["Instances"]
