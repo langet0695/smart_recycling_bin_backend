@@ -27,12 +27,13 @@ module.exports.s3JSONWriter = (filename, content, prefix) => {
 
     console.log(data);
 
-    s3.upload(data, function (err, data) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log('Uploaded ' + prefix + ' ' + file);
-        }
+    new Promise((resolve, reject) => {
+        s3.upload(
+          data,
+          function(err, data) {
+            if (err) reject(err);
+            resolve(data);
+          }
+        );
     });
-
 };
