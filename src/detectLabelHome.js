@@ -5,6 +5,7 @@ const rekognition = new AWS.Rekognition(
 { apiVersion: "2016-06-27" }
 );
 const labelAnalyzer = require("./labelAnalyzer");
+const responseWriter = require("./writeJSONToS3")
 
 module.exports.handler = async (event, context) => {
 
@@ -33,7 +34,11 @@ module.exports.handler = async (event, context) => {
 
   let labels = labelResult.Labels;
 
+  const rawWrite = await responseWriter.s3JSONWriter(imageToDetect, labels, 'rawDetectLabelResponse');
+
   const output = await labelAnalyzer.analyzer(labels);
+
+  const analyzedWrite = await responseWriter.s3JSONWriter(imageToDetect, output, 'analyzedLabelResponse');
 
   return {
     statusCode: 200,
