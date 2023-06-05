@@ -6,9 +6,10 @@ The objective of this project is to provide a developer with the tools to buiild
 2. Open terminal and execute ``git clone <https clone url>``
 3. `cd` into project folder and execute `npm install`
 4. Set AWS credentials for this project through the following command `serverless config credentials --provider aws --key <your-key> --secret <your-secret> --profile smart-recycling`
-5. Install `aws` cli and create a profile titled `smart-recycling`
-6. Finally deploy to AWS `serverless deploy --aws-profile smart-recycling`
-7. Once deployed endpoints will be returned in the terminal that you can be used with the following documentation.
+5. If a destination bucket does not exist then create a new S3 bucket titled `smart-recycling-bin-images` with a public AWS policy.
+6. Install `aws` cli and create a profile titled `smart-recycling`
+7. Finally deploy to AWS `serverless deploy --aws-profile smart-recycling`
+8. Once deployed endpoints will be returned in the terminal that you can be used with the following documentation.
 
 # REST End Point Documentation
 
